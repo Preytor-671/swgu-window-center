@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 — 2026-09-29
+
+- Find the Uprising Launcher in common per-user and Program Files locations.
+- Detect the official Uprising Launcher Start-menu shortcut.
+- Show a file picker for custom drives and installation folders.
+- Retain the explicit `-LauncherPath` option for advanced use.
+
 ## 1.0.0 — 2026-09-29
 
 - Add manual centering for visible `SWGEmu.exe` windows.

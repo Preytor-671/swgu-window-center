@@ -40,7 +40,9 @@ Run the helper again whenever needed. Nothing is installed.
 
 The installer copies three readable scripts to `%LOCALAPPDATA%\SWGU Window Center` and creates separate launch and uninstall shortcuts in the Start menu. It does not change the official shortcut.
 
-If the Uprising Launcher is installed somewhere unusual, run this from PowerShell:
+The installer checks the normal per-user and Program Files locations and any **Uprising Launcher** Start-menu shortcut. If the launcher is installed on another drive or in a custom folder, a file picker asks the user to select `Uprising Launcher.exe`.
+
+Advanced users can also specify the launcher path directly:
 
 ```powershell
 .\Install.ps1 -LauncherPath 'D:\Path\To\Uprising Launcher.exe'
