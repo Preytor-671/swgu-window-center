@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 — 2026-09-29
+
+- Remove the unreliable automated launcher wrapper and installer.
+- Make the tested manual centering workflow the only supported method.
+- Find the actual visible window owned by `SWGEmu.exe` instead of relying on PowerShell's sometimes-empty `MainWindowHandle` property.
+- Clarify that nothing is installed and removal only requires deleting the extracted folder.
+- Retain cleanup instructions for users of older automated releases.
+
 ## 1.0.3 — 2026-09-29
 
 - Keep watching through the Uprising Launcher-to-`SWGEmu.exe` handoff.
