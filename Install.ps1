@@ -8,9 +8,19 @@ $ErrorActionPreference = 'Stop'
 function Resolve-UprisingLauncherPath {
     param([string]$RequestedPath)
 
+    function Test-UprisingLauncherPath {
+        param([string]$Path)
+
+        return (
+            -not [string]::IsNullOrWhiteSpace($Path) -and
+            (Test-Path -LiteralPath $Path -PathType Leaf) -and
+            ([IO.Path]::GetFileName($Path) -ieq 'Uprising Launcher.exe')
+        )
+    }
+
     if (-not [string]::IsNullOrWhiteSpace($RequestedPath)) {
-        if (-not (Test-Path -LiteralPath $RequestedPath -PathType Leaf)) {
-            throw "Uprising Launcher was not found at '$RequestedPath'."
+        if (-not (Test-UprisingLauncherPath -Path $RequestedPath)) {
+            throw "A valid Uprising Launcher.exe was not found at '$RequestedPath'."
         }
         return [IO.Path]::GetFullPath($RequestedPath)
     }
@@ -40,7 +50,7 @@ function Resolve-UprisingLauncherPath {
     }
 
     foreach ($candidate in $candidates) {
-        if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+        if (Test-UprisingLauncherPath -Path $candidate) {
             return [IO.Path]::GetFullPath($candidate)
         }
     }
@@ -54,6 +64,10 @@ function Resolve-UprisingLauncherPath {
 
     if ($picker.ShowDialog() -ne [Windows.Forms.DialogResult]::OK) {
         throw 'Installation cancelled because Uprising Launcher.exe was not selected.'
+    }
+
+    if (-not (Test-UprisingLauncherPath -Path $picker.FileName)) {
+        throw 'The selected file must be named Uprising Launcher.exe.'
     }
 
     return [IO.Path]::GetFullPath($picker.FileName)

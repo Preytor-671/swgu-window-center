@@ -38,6 +38,8 @@ Run the helper again whenever needed. Nothing is installed.
 3. Open **SWG Uprising (Centered)** from the Windows Start menu.
 4. Use the Uprising launcher normally. Each newly opened SWG window is centered automatically when it is smaller than the primary monitor.
 
+During startup, SWGU may reposition its own window after it first appears. The helper checks again for several seconds so the final game window remains centered.
+
 The installer copies three readable scripts to `%LOCALAPPDATA%\SWGU Window Center` and creates separate launch and uninstall shortcuts in the Start menu. It does not change the official shortcut.
 
 The installer checks the normal per-user and Program Files locations and any **Uprising Launcher** Start-menu shortcut. If the launcher is installed on another drive or in a custom folder, a file picker asks the user to select `Uprising Launcher.exe`.
@@ -83,6 +85,7 @@ This utility only changes window position. It does not fix rendering crashes or 
 ## Troubleshooting
 
 - **Nothing moves:** Confirm `SWGEmu.exe` is running and has reached a visible window.
+- **The official shortcut does not center the game:** Use the separate **SWG Uprising (Centered)** Start-menu shortcut created by the installer.
 - **The game fills the screen:** That is intentional; native-size/fullscreen windows are not moved.
 - **The game is centered on the wrong display:** Set the desired display as the Windows primary monitor.
 - **Windows warns about an unsigned script:** The `.cmd` launchers use the local Windows PowerShell execution-policy bypass for these files only. Review the source before proceeding.

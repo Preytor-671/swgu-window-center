@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2 — 2026-09-29
+
+- Retry centering during the first several seconds after the game window appears, accommodating SWGU startup repositioning.
+- Require the detected or selected launcher to be named `Uprising Launcher.exe`.
+- Clarify that automated centering uses the separate Start-menu shortcut created by the installer.
+
 ## 1.0.1 — 2026-09-29
 
 - Find the Uprising Launcher in common per-user and Program Files locations.

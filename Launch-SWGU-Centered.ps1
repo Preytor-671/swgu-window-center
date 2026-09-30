@@ -23,7 +23,9 @@ if (-not $launcher) {
     Start-Process -FilePath $LauncherPath | Out-Null
 }
 
-$centeredProcessIds = @{}
+$gameStates = @{}
+$retryIntervalSeconds = 2
+$maximumAttempts = 8
 
 while ($true) {
     $launchers = Get-Process -Name 'Uprising Launcher' -ErrorAction SilentlyContinue
@@ -31,17 +33,25 @@ while ($true) {
         Where-Object { $_.MainWindowHandle -ne 0 })
 
     foreach ($game in $games) {
-        if (-not $centeredProcessIds.ContainsKey($game.Id)) {
-            Start-Sleep -Milliseconds 750
+        if (-not $gameStates.ContainsKey($game.Id)) {
+            $gameStates[$game.Id] = [pscustomobject]@{
+                Attempts = 0
+                NextAttempt = Get-Date
+            }
+        }
+
+        $state = $gameStates[$game.Id]
+        if ($state.Attempts -lt $maximumAttempts -and (Get-Date) -ge $state.NextAttempt) {
             & $centerScript -WaitSeconds 0 -ProcessId $game.Id
-            $centeredProcessIds[$game.Id] = $true
+            $state.Attempts++
+            $state.NextAttempt = (Get-Date).AddSeconds($retryIntervalSeconds)
         }
     }
 
     $liveIds = @($games | ForEach-Object Id)
-    foreach ($processId in @($centeredProcessIds.Keys)) {
+    foreach ($processId in @($gameStates.Keys)) {
         if ($processId -notin $liveIds) {
-            $centeredProcessIds.Remove($processId)
+            $gameStates.Remove($processId)
         }
     }
 
