@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3 — 2026-09-29
+
+- Keep watching through the Uprising Launcher-to-`SWGEmu.exe` handoff.
+- Track the game process even before it owns a visible window.
+- Allow a grace period when the launcher closes before the game process or window appears.
+
 ## 1.0.2 — 2026-09-29
 
 - Retry centering during the first several seconds after the game window appears, accommodating SWGU startup repositioning.

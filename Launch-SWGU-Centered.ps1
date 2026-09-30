@@ -26,13 +26,21 @@ if (-not $launcher) {
 $gameStates = @{}
 $retryIntervalSeconds = 2
 $maximumAttempts = 8
+$handoffGraceSeconds = 30
+$handoffDeadline = (Get-Date).AddSeconds($handoffGraceSeconds)
+$launcherWasRunning = $true
 
 while ($true) {
-    $launchers = Get-Process -Name 'Uprising Launcher' -ErrorAction SilentlyContinue
-    $games = @(Get-Process -Name 'SWGEmu' -ErrorAction SilentlyContinue |
-        Where-Object { $_.MainWindowHandle -ne 0 })
+    $launchers = @(Get-Process -Name 'Uprising Launcher' -ErrorAction SilentlyContinue)
+    $allGames = @(Get-Process -Name 'SWGEmu' -ErrorAction SilentlyContinue)
+    $visibleGames = @($allGames | Where-Object { $_.MainWindowHandle -ne 0 })
 
-    foreach ($game in $games) {
+    if ($launcherWasRunning -and $launchers.Count -eq 0) {
+        $handoffDeadline = (Get-Date).AddSeconds($handoffGraceSeconds)
+    }
+    $launcherWasRunning = $launchers.Count -gt 0
+
+    foreach ($game in $visibleGames) {
         if (-not $gameStates.ContainsKey($game.Id)) {
             $gameStates[$game.Id] = [pscustomobject]@{
                 Attempts = 0
@@ -48,14 +56,18 @@ while ($true) {
         }
     }
 
-    $liveIds = @($games | ForEach-Object Id)
+    $liveIds = @($allGames | ForEach-Object Id)
     foreach ($processId in @($gameStates.Keys)) {
         if ($processId -notin $liveIds) {
             $gameStates.Remove($processId)
         }
     }
 
-    if (-not $launchers -and $games.Count -eq 0) {
+    if (
+        $launchers.Count -eq 0 -and
+        $allGames.Count -eq 0 -and
+        (Get-Date) -ge $handoffDeadline
+    ) {
         break
     }
 

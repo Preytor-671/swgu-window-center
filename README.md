@@ -38,7 +38,7 @@ Run the helper again whenever needed. Nothing is installed.
 3. Open **SWG Uprising (Centered)** from the Windows Start menu.
 4. Use the Uprising launcher normally. Each newly opened SWG window is centered automatically when it is smaller than the primary monitor.
 
-During startup, SWGU may reposition its own window after it first appears. The helper checks again for several seconds so the final game window remains centered.
+The helper follows the full launcher-to-game handoff. It continues watching while `SWGEmu.exe` starts without a visible window, allows a grace period if the launcher closes first, and checks centering again for several seconds in case SWGU repositions its own window during startup.
 
 The installer copies three readable scripts to `%LOCALAPPDATA%\SWGU Window Center` and creates separate launch and uninstall shortcuts in the Start menu. It does not change the official shortcut.
 
